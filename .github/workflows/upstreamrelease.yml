@@ -16,6 +16,8 @@ jobs:
         run: |
           echo "VS_VERSION=$(curl --silent http://api.vintagestory.at/lateststable.txt)" >> $GITHUB_ENV
       - name: foo
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release view "v${VS_VERSION}"
       - name: "Check if Release already Exist"
