@@ -23,10 +23,17 @@ jobs:
         id: vsapi
         run: |
           echo "VS_VERSION=$(curl --silent http://api.vintagestory.at/lateststable.txt)" >> $GITHUB_ENV
+          
+      - name: "Check if Release already Exist"
+        id: releasecheck
+        uses: "insightsengineering/release-existence-action@v1.0.0"
+        with:
+          release-tag: "v${{steps.vsapi.output.VS_VERSION}}"
 
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
+        if: steps.releasecheck.outputs.release-exists == false
         with:
           images: |
             ${{ github.repository_owner }}/vintagestory-server
