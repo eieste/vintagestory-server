@@ -9,6 +9,8 @@ on:
   pull_request:
     branches:
       - 'main'
+  schedule:
+    - cron: "0 0 */1 * *"
 
 jobs:
   build-container:
@@ -16,6 +18,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        
+      - name: Fetch Stable Version
+        id: vsapi
+        run: |
+          echo "VS_VERSION=$(curl --silent http://api.vintagestory.at/lateststable.txt)" >> $GITHUB_ENV
 
       - name: Docker meta
         id: meta
@@ -24,7 +31,7 @@ jobs:
           images: |
             ${{ github.repository_owner }}/vintagestory-server
           tags: |
-            type=semver,pattern={{version}}
+            type=raw,pattern={{steps.vsapi.output.VS_VERSION}}
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/') }}
 
       - name: Login to DockerHub
