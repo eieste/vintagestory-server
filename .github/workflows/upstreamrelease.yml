@@ -1,0 +1,24 @@
+
+
+name: "Check if VintageStory has a new Release"
+
+on:
+  schedule:
+    - cron: "0 0 */1 * *"
+
+
+jobs:
+  upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Stable Version
+        run: |
+          echo "VS_VERSION=$(curl --silent http://api.vintagestory.at/lateststable.txt)" >> $GITHUB_ENV
+      - name: "Check if Release already Exist"
+        id: releasecheck
+        uses: "insightsengineering/release-existence-action@v1.0.0"
+        with:
+          release-tag: "v${VS_VERSION}"
+      - name: "Trigger build"
+        if: steps.releasecheck.outputs.release-exists == false
+        run: echo "Do Build"
