@@ -12,6 +12,9 @@ jobs:
   upstream:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Fetch Stable Version
         run: |
           echo "VS_VERSION=$(curl --silent http://api.vintagestory.at/lateststable.txt)" >> $GITHUB_ENV
