@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/dotnet/runtime:7.0
 
 ARG SERVER_VERSION="1.20.6"
-ARG SERVER_BRANCH="stable
+ARG SERVER_BRANCH="stable"
+
 # Env var
 ENV SERVER_BRANCH=${SERVER_BRANCH} \
     SERVER_VERSION=${SERVER_VERSION} \
